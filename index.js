@@ -46,6 +46,29 @@ async function run(){
             const item = await bookCollection.insertOne(newItem);
             res.send(item);
         });
+
+        app.get('/my-item', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const cursor = bookCollection.find(query);
+            const item = await cursor.toArray();
+            res.send(item);
+        });
+
+        app.put('/items/:id', async (req, res) =>{
+            const id = req.params.id;
+            const updatedQuantity = req.body;
+            console.log(updatedQuantity.newQuantity);
+            const filter = { _id: ObjectId(id) };
+            const options = {upsert:true};
+            const updatedDoc = {
+                $set: {
+                    quantity:updatedQuantity.newQuantity
+                }
+            };
+            const result = await bookCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
     }
     finally{
 
