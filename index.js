@@ -40,6 +40,12 @@ async function run(){
             const item = await bookCollection.deleteOne(query);
             res.send(item);
         });
+
+        app.post('/items', async (req, res) => {
+            const newItem = req.body;
+            const item = await bookCollection.insertOne(newItem);
+            res.send(item);
+        });
     }
     finally{
 
